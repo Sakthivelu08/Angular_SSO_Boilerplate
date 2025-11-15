@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { RedirectHandlerComponent } from "./auth/redirect-handler.component";
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  selector: "app-root",
+  standalone: true,
+  imports: [RouterOutlet, RedirectHandlerComponent],
+  templateUrl: "./app.component.html"
 })
-export class AppComponent {
-  title = 'Angular_SSO_Boilerplate';
-}
+export class AppComponent {}

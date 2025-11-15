@@ -1,0 +1,4 @@
+<div class="profile-container" *ngIf="profile">
+    <h1>Welcome {{ profile.displayName }}</h1>
+    <p>Email: {{ profile.mail || profile.userPrincipalName }}</p>
+</div>

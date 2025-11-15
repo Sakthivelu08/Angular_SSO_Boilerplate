@@ -1,0 +1,45 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.card {
+  padding: 30px;
+  border-radius: 12px;
+  width: 350px;
+  text-align: center;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.profile-photo img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.email {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background: #d9534f;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
