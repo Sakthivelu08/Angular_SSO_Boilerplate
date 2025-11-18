@@ -1,22 +1,28 @@
 import { Routes } from "@angular/router";
-import { MsalGuard } from "@azure/msal-angular";
+import { authGuard } from "./auth/auth.guard";
 
 export const routes: Routes = [
   {
     path: "",
-    loadComponent: () =>
-      import("./auth/login/login.component").then(m => m.LoginComponent)
+    redirectTo: "login",
+    pathMatch: "full"
   },
+
   {
     path: "login",
     loadComponent: () =>
-      import("./auth/login/login.component").then(m => m.LoginComponent)
+      import("./auth/login/login.component").then(m => m.LoginComponent),
+    canActivate: [authGuard]
   },
+
   {
     path: "home",
     loadComponent: () =>
       import("./pages/home/home.component").then(m => m.HomeComponent),
-    canActivate: [MsalGuard]
+    canActivate: [authGuard]
   },
-  { path: "**", redirectTo: "" }
+  {
+    path: "**",
+    redirectTo: "login"
+  }
 ];

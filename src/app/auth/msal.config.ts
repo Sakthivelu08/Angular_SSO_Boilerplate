@@ -1,25 +1,31 @@
 import { BrowserCacheLocation, LogLevel } from "@azure/msal-browser";
+import { environment } from "../../environments/environment";
 
 export const msalConfig = {
   auth: {
-    clientId: "e2a32780-387c-411c-a42a-51f2fc94d17b",
-    authority: "https://login.microsoftonline.com/4364f74a-6fec-4021-aa47-71ab911adf97",
-    redirectUri: "http://localhost:4200"
+    clientId: environment.azure.clientId,
+    authority: `https://login.microsoftonline.com/${environment.azure.tenantId}`,
+    redirectUri: environment.azure.redirectUri
   },
   cache: {
     cacheLocation: BrowserCacheLocation.LocalStorage,
     storeAuthStateInCookie: false
   },
-  system: {
-    loggerOptions: {
-      loggerCallback: (level: LogLevel, message: string) => {
-        console.log("MSAL:", message);
-      },
-      logLevel: LogLevel.Verbose
-    }
-  }
+  // To see detailed MSAL logs, uncomment this section
+  // system: { 
+  //   loggerOptions: {
+  //     loggerCallback: (level: LogLevel, message: string) => {
+  //       console.log("MSAL:", message);
+  //     },
+  //     logLevel: LogLevel.Verbose
+  //   }
+  // }
 };
 
 export const loginRequest = {
-  scopes: ["user.read"]
+  scopes: [
+    "User.Read",
+    "Group.Read.All",
+    "Directory.Read.All"
+  ]
 };

@@ -10,28 +10,62 @@ import { MsalService } from '@azure/msal-angular';
 })
 export class HomeComponent implements OnInit {
   profile: any;
+  photoUrl: string | null = null;
+  groups: any[] = [];
+  roles: any[] = [];
 
   constructor(private http: HttpClient, private msal: MsalService) {}
 
   async ngOnInit() {
     const account = this.msal.instance.getActiveAccount();
-    console.log('active account:', account);
+
     if (!account) return;
 
+    // Update Roles
+    this.roles = account.idTokenClaims?.roles as string[] || [];
+
+    // Acquire Graph API token
     const result = await this.msal.instance.acquireTokenSilent({
-      scopes: ['User.Read'],
+      scopes: [
+        'User.Read',
+        'Group.Read.All',
+        'Directory.Read.All'
+      ],
       account
     });
 
-    console.log('acquired token:', result);
+    const headers = {
+      Authorization: `Bearer ${result.accessToken}`
+    };
 
-    this.http
-      .get('https://graph.microsoft.com/v1.0/me', {
-        headers: { Authorization: `Bearer ${result.accessToken}` }
-      })
-      .subscribe(data => {
+    // Fetch user basic profile
+    this.http.get('https://graph.microsoft.com/v1.0/me', { headers })
+      .subscribe((data: any) => {
         console.log("MS Graph /me response:", data);
         this.profile = data;
       });
+
+    // Fetch profile photo
+    this.http.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
+      headers,
+      responseType: 'blob'
+    })
+    .subscribe({
+      next: (blob) => {
+        this.photoUrl = URL.createObjectURL(blob);
+      },
+      error: () => (this.photoUrl = null)
+    });
+
+    // Fetch user groups & directory roles
+    this.http.get("https://graph.microsoft.com/v1.0/me/memberOf", { headers })
+      .subscribe((groups: any) => {
+        console.log("Groups & Roles:", groups.value);
+        this.groups = groups.value;
+      });
+  }
+
+  logout() {
+    this.msal.logoutRedirect();
   }
 }
